@@ -96,6 +96,7 @@ GPT-5 (Codex CLI)
 - Added `prisma.config.ts` and updated schema for Prisma 7 config requirements.
 - Updated workspace configs, turbo env declaration, and README to document tenant bootstrap.
 - Review fixes: moved tenant users into per-tenant schema, added Problem+JSON handling and OpenAPI stub, and clarified env/examples + bootstrap outputs.
+- Post-review: tests not re-run after fixes; root `.env.example` now only points to per-app examples.
 - Installed dependencies and generated Prisma client.
 - Tests run: `npm run check-types --workspace=apps/api`, `npm run lint --workspace=apps/api`, `npm run check-types --workspace=apps/worker`, `npm run lint --workspace=apps/worker`.
 - Not run: web/docs lint or typegen (outside bootstrap scope).
