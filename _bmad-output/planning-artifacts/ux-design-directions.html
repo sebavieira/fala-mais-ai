@@ -1,0 +1,1275 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FalaMais.AI - Direções Visuais</title>
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --surface-2: #f1f4f9;
+      --surface-3: #e9edf4;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #1fb6a5;
+      --primary-strong: #0f8f7c;
+      --accent: #f59e0b;
+      --border: #e4e8f0;
+      --shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --gap: 12px;
+      --font: "Sora", "Inter", "Segoe UI", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0d1117;
+      color: var(--text);
+      font-family: var(--font);
+    }
+
+    header {
+      padding: 24px 28px 10px;
+      color: #e6edf3;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+
+    header p {
+      margin: 0;
+      color: #98a6b3;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px 28px 0;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      border: 1px solid #223040;
+      background: #141b23;
+      color: #e6edf3;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #0b1219;
+      border-color: transparent;
+      box-shadow: 0 0 0 2px rgba(33, 182, 154, 0.2);
+    }
+
+    .panel {
+      display: none;
+      padding: 18px 28px 40px;
+    }
+
+    .panel.active { display: block; }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      color: #e6edf3;
+    }
+
+    .panel p {
+      margin: 0 0 12px;
+      color: #98a6b3;
+      font-size: 13px;
+    }
+
+    .preview-frame {
+      border: 1px solid #223040;
+      border-radius: 18px;
+      background: #0d1117;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+      overflow: auto;
+      max-height: calc(100vh - 260px);
+    }
+
+    .canvas {
+      width: 1440px;
+      height: 900px;
+      background: var(--bg);
+      display: grid;
+      grid-template-rows: 54px 1fr;
+      grid-template-columns: 300px 1fr 320px;
+      grid-template-areas:
+        "top top top"
+        "left main right";
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .topbar {
+      grid-area: top;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .brand .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      background: var(--primary);
+      box-shadow: 0 0 12px rgba(31, 182, 165, 0.45);
+    }
+
+    .nav {
+      display: flex;
+      gap: 14px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav span.active { color: var(--primary-strong); font-weight: 600; }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .status-pill {
+      background: rgba(31, 182, 165, 0.12);
+      color: var(--primary-strong);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 10px;
+    }
+
+    .left {
+      grid-area: left;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .search {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--surface-2);
+    }
+
+    .chip.active {
+      background: rgba(31, 182, 165, 0.12);
+      color: var(--primary-strong);
+      border-color: rgba(31, 182, 165, 0.35);
+    }
+
+    .conv {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .conv.active {
+      background: #ffffff;
+      border-color: rgba(31, 182, 165, 0.4);
+      box-shadow: 0 6px 14px rgba(31, 182, 165, 0.18);
+    }
+
+    .conv-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .conv span { color: var(--muted); font-size: 11px; }
+
+    .tag {
+      font-size: 10px;
+      color: #0b1219;
+      background: #dff7f2;
+      padding: 2px 6px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .tag.warn { background: #ffedd5; color: #7c2d12; }
+    .tag.vip { background: #ede9fe; color: #5b21b6; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: var(--primary-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      position: relative;
+    }
+
+    .avatar .online {
+      position: absolute;
+      right: 2px;
+      bottom: 2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      border: 2px solid #fff;
+    }
+
+    .main {
+      grid-area: main;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .chat-header .left-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .chat-header .right-meta {
+      display: flex;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chat-body {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      padding-right: 8px;
+    }
+
+    .bubble {
+      max-width: 70%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      font-size: 12px;
+      color: #1f2937;
+      position: relative;
+    }
+
+    .bubble.out {
+      margin-left: auto;
+      background: #dff7f2;
+      color: #0b1219;
+      border: 1px solid rgba(31, 182, 165, 0.3);
+    }
+
+    .bubble time {
+      display: block;
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    .ai-inline {
+      border: 1px dashed rgba(31, 182, 165, 0.6);
+      background: rgba(31, 182, 165, 0.08);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #0b1219;
+      display: grid;
+      gap: 6px;
+    }
+
+    .ai-inline strong {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--primary-strong);
+    }
+
+    .ai-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ai-btn {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(31, 182, 165, 0.4);
+      color: var(--primary-strong);
+      background: #ffffff;
+      font-weight: 600;
+    }
+
+    .ai-btn.primary {
+      background: var(--primary);
+      color: #062b26;
+      border-color: transparent;
+    }
+
+    .composer {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 12px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .composer .tools {
+      display: flex;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .right {
+      grid-area: right;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 12px;
+      color: var(--text);
+      display: grid;
+      gap: 8px;
+    }
+
+    .card h4 { margin: 0; font-size: 12px; color: var(--muted); }
+
+    .profile {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .quick-actions {
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .ai-dock {
+      border: 1px dashed rgba(31, 182, 165, 0.5);
+      background: rgba(31, 182, 165, 0.08);
+      border-radius: 12px;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .ai-dock h4 {
+      margin: 0;
+      font-size: 12px;
+      color: var(--primary-strong);
+    }
+
+    .variant-a .ai-dock { display: grid; }
+    .variant-a .ai-inline { display: grid; }
+
+    .variant-b .ai-dock { display: none; }
+    .variant-b .ai-inline { display: grid; }
+
+    .variant-c .ai-dock { display: grid; }
+    .variant-c .ai-inline { display: none; }
+
+    .variant-d .manager-card { display: grid; }
+    .variant-d .ai-dock { display: grid; }
+
+    .variant-e {
+      --bg: #0f1620;
+      --surface: #141b23;
+      --surface-2: #1b2531;
+      --surface-3: #233041;
+      --text: #e6edf3;
+      --muted: #9aa6b2;
+      --border: #223040;
+    }
+
+    .variant-e .bubble {
+      background: #1b2531;
+      color: #e6edf3;
+    }
+
+    .variant-e .bubble.out {
+      background: rgba(31, 182, 165, 0.2);
+      color: #e6edf3;
+    }
+
+    .variant-e .composer { color: #9aa6b2; }
+
+    .variant-f {
+      --radius: 12px;
+      --radius-sm: 10px;
+    }
+
+    .canvas.variant-f {
+      grid-template-columns: 260px 1fr 280px;
+      gap: 10px;
+    }
+
+    .variant-f .topbar { padding: 6px 10px; }
+    .variant-f .chat-body { gap: 6px; }
+    .variant-f .bubble { font-size: 11px; }
+    .variant-f .conv { padding: 8px; }
+
+    .manager-card { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Direções Visuais (WhatsApp‑like)</h1>
+    <p>Baseadas no WhatsApp Web, com IA integrada de forma discreta e controlada.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dir-a">A — Híbrido (A+B)</button>
+    <button class="tab-btn" data-tab="dir-b">B — IA inline</button>
+    <button class="tab-btn" data-tab="dir-c">C — IA lateral</button>
+    <button class="tab-btn" data-tab="dir-d">D — Operacional + gestor</button>
+    <button class="tab-btn" data-tab="dir-e">E — WhatsApp Dark</button>
+    <button class="tab-btn" data-tab="dir-f">F — Compacto</button>
+  </div>
+
+  <section class="panel active" id="dir-a">
+    <h2>A — Híbrido (A+B)</h2>
+    <p>Layout fiel ao WhatsApp Web, com IA inline na conversa e também no painel lateral.</p>
+    <div class="preview-frame">
+      <div class="canvas variant-a">
+        <div class="topbar">
+          <div class="brand"><span class="dot"></span> FalaMais.AI</div>
+          <div class="nav">
+            <span>Dashboard</span>
+            <span class="active">Conversas</span>
+            <span>Contatos</span>
+            <span>CRM</span>
+            <span>Tarefas</span>
+            <span>Relatórios</span>
+          </div>
+          <div class="top-actions">
+            <span class="status-pill">IA ativa</span>
+            <span>Online</span>
+          </div>
+        </div>
+        <aside class="left">
+          <div class="search">Buscar conversas...</div>
+          <div class="filters">
+            <span class="chip active">Todas</span>
+            <span class="chip">Não lidas</span>
+            <span class="chip">Com tarefas</span>
+          </div>
+          <div class="conv active">
+            <div class="avatar">M<span class="online"></span></div>
+            <div>
+              <div class="conv-title">
+                <span>Maria Silva</span>
+                <span>10:32</span>
+              </div>
+              <span>Gostaria de saber mais sobre os planos</span>
+              <div class="tags">
+                <span class="tag vip">Cliente VIP</span>
+                <span class="tag">Interessado</span>
+              </div>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">J</div>
+            <div>
+              <div class="conv-title">
+                <span>João Santos</span>
+                <span>09:12</span>
+              </div>
+              <span>Preciso integrar com CRM</span>
+              <div class="tags">
+                <span class="tag warn">Orçamento</span>
+              </div>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">A</div>
+            <div>
+              <div class="conv-title">
+                <span>Ana Costa</span>
+                <span>Ontem</span>
+              </div>
+              <span>Urgente: preciso de retorno rápido</span>
+              <div class="tags">
+                <span class="tag warn">Urgente</span>
+                <span class="tag">E-commerce</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="chat-header">
+            <div class="left-meta">
+              <div class="avatar">M<span class="online"></span></div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div class="chip">Online</div>
+              </div>
+            </div>
+            <div class="right-meta">
+              <span>Ligação</span>
+              <span>Vídeo</span>
+              <span>Menu</span>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble">
+              Olá! Gostaria de saber mais sobre seus planos.
+              <time>10:30</time>
+            </div>
+            <div class="bubble out">
+              Olá Maria! Temos planos a partir de R$ 200/mês. Quer que eu envie detalhes?
+              <time>10:32</time>
+            </div>
+            <div class="ai-inline">
+              <strong>IA sugere</strong>
+              Responder com tabela de preços + perguntar tamanho da equipe.
+              <div class="ai-actions">
+                <span class="ai-btn primary">Aprovar</span>
+                <span class="ai-btn">Editar resposta</span>
+                <span class="ai-btn">Ignorar</span>
+              </div>
+            </div>
+            <div class="bubble">
+              Sim, por favor! E vocês têm desconto para novos clientes?
+              <time>10:35</time>
+            </div>
+          </div>
+          <div class="composer">
+            <span>Digite uma mensagem...</span>
+            <div class="tools">
+              <span>Anexo</span>
+              <span>Emoji</span>
+              <span>Enviar</span>
+            </div>
+          </div>
+        </main>
+        <aside class="right">
+          <div class="card">
+            <div class="profile">
+              <div class="avatar">M</div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div>+55 11 99999-1234</div>
+              </div>
+            </div>
+          </div>
+          <div class="ai-dock">
+            <h4>Copiloto IA</h4>
+            <span>Intenção: Preço / comparação</span>
+            <span>Próxima ação: enviar tabela + agendar follow-up</span>
+            <div class="ai-actions">
+              <span class="ai-btn primary">Aplicar ação</span>
+              <span class="ai-btn">Ver motivo</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Ações rápidas</h4>
+            <div class="quick-actions">
+              <span>Criar tarefa</span>
+              <span>Adicionar tag</span>
+              <span>Editar contato</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Pipeline</h4>
+            <span class="tag">Proposta</span>
+          </div>
+          <div class="card">
+            <h4>Observações</h4>
+            <span>Interessada em plano premium.</span>
+            <span>Agendou reunião para quarta-feira.</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="dir-b">
+    <h2>B — IA inline</h2>
+    <p>Sugestões aparecem dentro do fluxo da conversa, mantendo o lado direito focado em CRM.</p>
+    <div class="preview-frame">
+      <div class="canvas variant-b">
+        <div class="topbar">
+          <div class="brand"><span class="dot"></span> FalaMais.AI</div>
+          <div class="nav">
+            <span>Dashboard</span>
+            <span class="active">Conversas</span>
+            <span>Contatos</span>
+            <span>CRM</span>
+            <span>Tarefas</span>
+          </div>
+          <div class="top-actions">
+            <span class="status-pill">IA ativa</span>
+            <span>Online</span>
+          </div>
+        </div>
+        <aside class="left">
+          <div class="search">Buscar conversas...</div>
+          <div class="filters">
+            <span class="chip active">Todas</span>
+            <span class="chip">Não lidas</span>
+            <span class="chip">Com tarefas</span>
+          </div>
+          <div class="conv active">
+            <div class="avatar">M<span class="online"></span></div>
+            <div>
+              <div class="conv-title">
+                <span>Maria Silva</span>
+                <span>10:32</span>
+              </div>
+              <span>Gostaria de saber mais sobre os planos</span>
+              <div class="tags">
+                <span class="tag vip">Cliente VIP</span>
+                <span class="tag">Interessado</span>
+              </div>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">J</div>
+            <div>
+              <div class="conv-title">
+                <span>João Santos</span>
+                <span>09:12</span>
+              </div>
+              <span>Preciso integrar com CRM</span>
+              <div class="tags">
+                <span class="tag warn">Orçamento</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="chat-header">
+            <div class="left-meta">
+              <div class="avatar">M<span class="online"></span></div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div class="chip">Online</div>
+              </div>
+            </div>
+            <div class="right-meta">
+              <span>Ligação</span>
+              <span>Vídeo</span>
+              <span>Menu</span>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble">
+              Olá! Gostaria de saber mais sobre seus planos.
+              <time>10:30</time>
+            </div>
+            <div class="bubble out">
+              Olá Maria! Temos planos a partir de R$ 200/mês. Quer detalhes?
+              <time>10:32</time>
+            </div>
+            <div class="ai-inline">
+              <strong>IA sugere</strong>
+              Perguntar número de atendentes + enviar PDF.
+              <div class="ai-actions">
+                <span class="ai-btn primary">Aprovar</span>
+                <span class="ai-btn">Editar</span>
+                <span class="ai-btn">Ignorar</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer">
+            <span>Digite uma mensagem...</span>
+            <div class="tools">
+              <span>Anexo</span>
+              <span>Emoji</span>
+              <span>Enviar</span>
+            </div>
+          </div>
+        </main>
+        <aside class="right">
+          <div class="card">
+            <div class="profile">
+              <div class="avatar">M</div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div>+55 11 99999-1234</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Ações rápidas</h4>
+            <div class="quick-actions">
+              <span>Criar tarefa</span>
+              <span>Adicionar tag</span>
+              <span>Editar contato</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Pipeline</h4>
+            <span class="tag">Proposta</span>
+          </div>
+          <div class="card">
+            <h4>Tags</h4>
+            <div class="tags">
+              <span class="tag vip">Cliente VIP</span>
+              <span class="tag">Interessado</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="dir-c">
+    <h2>C — IA lateral</h2>
+    <p>Sugestões concentradas no painel direito para manter a conversa limpa.</p>
+    <div class="preview-frame">
+      <div class="canvas variant-c">
+        <div class="topbar">
+          <div class="brand"><span class="dot"></span> FalaMais.AI</div>
+          <div class="nav">
+            <span>Dashboard</span>
+            <span class="active">Conversas</span>
+            <span>Contatos</span>
+            <span>CRM</span>
+            <span>Tarefas</span>
+          </div>
+          <div class="top-actions">
+            <span class="status-pill">IA ativa</span>
+            <span>Online</span>
+          </div>
+        </div>
+        <aside class="left">
+          <div class="search">Buscar conversas...</div>
+          <div class="filters">
+            <span class="chip active">Todas</span>
+            <span class="chip">Não lidas</span>
+            <span class="chip">Com tarefas</span>
+          </div>
+          <div class="conv active">
+            <div class="avatar">M<span class="online"></span></div>
+            <div>
+              <div class="conv-title">
+                <span>Maria Silva</span>
+                <span>10:32</span>
+              </div>
+              <span>Gostaria de saber mais sobre os planos</span>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">L</div>
+            <div>
+              <div class="conv-title">
+                <span>Luana Ferreira</span>
+                <span>09:10</span>
+              </div>
+              <span>Preciso falar com um consultor</span>
+            </div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="chat-header">
+            <div class="left-meta">
+              <div class="avatar">M<span class="online"></span></div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div class="chip">Online</div>
+              </div>
+            </div>
+            <div class="right-meta">
+              <span>Ligação</span>
+              <span>Vídeo</span>
+              <span>Menu</span>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble">
+              Olá! Gostaria de saber mais sobre seus planos.
+              <time>10:30</time>
+            </div>
+            <div class="bubble out">
+              Claro! Posso te enviar os detalhes agora.
+              <time>10:32</time>
+            </div>
+          </div>
+          <div class="composer">
+            <span>Digite uma mensagem...</span>
+            <div class="tools">
+              <span>Anexo</span>
+              <span>Emoji</span>
+              <span>Enviar</span>
+            </div>
+          </div>
+        </main>
+        <aside class="right">
+          <div class="card">
+            <div class="profile">
+              <div class="avatar">M</div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div>+55 11 99999-1234</div>
+              </div>
+            </div>
+          </div>
+          <div class="ai-dock">
+            <h4>Copiloto IA</h4>
+            <span>Resumo: lead comparando concorrentes</span>
+            <span>Sugestão: enviar tabela + agendar follow-up em 3 dias</span>
+            <div class="ai-actions">
+              <span class="ai-btn primary">Aplicar ação</span>
+              <span class="ai-btn">Editar</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Pipeline</h4>
+            <span class="tag">Qualificação</span>
+          </div>
+          <div class="card">
+            <h4>Tags</h4>
+            <div class="tags">
+              <span class="tag vip">Cliente VIP</span>
+              <span class="tag">Interessado</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="dir-d">
+    <h2>D — Operacional + gestor</h2>
+    <p>Mesmo layout WhatsApp, com um cartão de métricas rápidas para supervisores.</p>
+    <div class="preview-frame">
+      <div class="canvas variant-d">
+        <div class="topbar">
+          <div class="brand"><span class="dot"></span> FalaMais.AI</div>
+          <div class="nav">
+            <span>Dashboard</span>
+            <span class="active">Conversas</span>
+            <span>CRM</span>
+            <span>Tarefas</span>
+            <span>Relatórios</span>
+          </div>
+          <div class="top-actions">
+            <span class="status-pill">IA ativa</span>
+            <span>Equipe 6 online</span>
+          </div>
+        </div>
+        <aside class="left">
+          <div class="search">Buscar conversas...</div>
+          <div class="filters">
+            <span class="chip active">Todas</span>
+            <span class="chip">Não lidas</span>
+            <span class="chip">Com tarefas</span>
+          </div>
+          <div class="conv active">
+            <div class="avatar">M<span class="online"></span></div>
+            <div>
+              <div class="conv-title">
+                <span>Maria Silva</span>
+                <span>10:32</span>
+              </div>
+              <span>Gostaria de saber mais sobre os planos</span>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">J</div>
+            <div>
+              <div class="conv-title">
+                <span>João Santos</span>
+                <span>09:12</span>
+              </div>
+              <span>Integração com CRM</span>
+            </div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="chat-header">
+            <div class="left-meta">
+              <div class="avatar">M<span class="online"></span></div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div class="chip">Online</div>
+              </div>
+            </div>
+            <div class="right-meta">
+              <span>Ligação</span>
+              <span>Vídeo</span>
+              <span>Menu</span>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble">
+              Olá! Gostaria de saber mais sobre seus planos.
+              <time>10:30</time>
+            </div>
+            <div class="bubble out">
+              Claro! Vou te enviar os detalhes agora.
+              <time>10:32</time>
+            </div>
+            <div class="ai-inline">
+              <strong>IA sugere</strong>
+              Enviar PDF do plano + follow-up em 2 dias.
+              <div class="ai-actions">
+                <span class="ai-btn primary">Aprovar</span>
+                <span class="ai-btn">Editar</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer">
+            <span>Digite uma mensagem...</span>
+            <div class="tools">
+              <span>Anexo</span>
+              <span>Emoji</span>
+              <span>Enviar</span>
+            </div>
+          </div>
+        </main>
+        <aside class="right">
+          <div class="card manager-card">
+            <h4>Métricas rápidas</h4>
+            <span>Tempo médio resposta: 2m</span>
+            <span>Conversas abertas: 18</span>
+            <span>IA aprovada: 64%</span>
+          </div>
+          <div class="ai-dock">
+            <h4>Copiloto IA</h4>
+            <span>Resumo: lead com alta intenção</span>
+            <span>Sugestão: oferecer call com especialista</span>
+            <div class="ai-actions">
+              <span class="ai-btn primary">Aplicar ação</span>
+              <span class="ai-btn">Ver motivo</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Pipeline</h4>
+            <span class="tag">Proposta</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="dir-e">
+    <h2>E — WhatsApp Dark</h2>
+    <p>Versão noturna mantendo o mesmo layout do WhatsApp Web.</p>
+    <div class="preview-frame">
+      <div class="canvas variant-e variant-a">
+        <div class="topbar">
+          <div class="brand"><span class="dot"></span> FalaMais.AI</div>
+          <div class="nav">
+            <span>Dashboard</span>
+            <span class="active">Conversas</span>
+            <span>Contatos</span>
+            <span>CRM</span>
+            <span>Tarefas</span>
+          </div>
+          <div class="top-actions">
+            <span class="status-pill">IA ativa</span>
+            <span>Online</span>
+          </div>
+        </div>
+        <aside class="left">
+          <div class="search">Buscar conversas...</div>
+          <div class="filters">
+            <span class="chip active">Todas</span>
+            <span class="chip">Não lidas</span>
+            <span class="chip">Com tarefas</span>
+          </div>
+          <div class="conv active">
+            <div class="avatar">M<span class="online"></span></div>
+            <div>
+              <div class="conv-title">
+                <span>Maria Silva</span>
+                <span>10:32</span>
+              </div>
+              <span>Gostaria de saber mais sobre os planos</span>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">J</div>
+            <div>
+              <div class="conv-title">
+                <span>João Santos</span>
+                <span>09:12</span>
+              </div>
+              <span>Integração com CRM</span>
+            </div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="chat-header">
+            <div class="left-meta">
+              <div class="avatar">M<span class="online"></span></div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div class="chip">Online</div>
+              </div>
+            </div>
+            <div class="right-meta">
+              <span>Ligação</span>
+              <span>Vídeo</span>
+              <span>Menu</span>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble">
+              Olá! Gostaria de saber mais sobre seus planos.
+              <time>10:30</time>
+            </div>
+            <div class="bubble out">
+              Claro! Posso te enviar detalhes agora.
+              <time>10:32</time>
+            </div>
+            <div class="ai-inline">
+              <strong>IA sugere</strong>
+              Enviar tabela + proposta personalizada.
+              <div class="ai-actions">
+                <span class="ai-btn primary">Aprovar</span>
+                <span class="ai-btn">Editar</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer">
+            <span>Digite uma mensagem...</span>
+            <div class="tools">
+              <span>Anexo</span>
+              <span>Emoji</span>
+              <span>Enviar</span>
+            </div>
+          </div>
+        </main>
+        <aside class="right">
+          <div class="card">
+            <div class="profile">
+              <div class="avatar">M</div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div>+55 11 99999-1234</div>
+              </div>
+            </div>
+          </div>
+          <div class="ai-dock">
+            <h4>Copiloto IA</h4>
+            <span>Resumo: lead com alta intenção</span>
+            <span>Sugestão: enviar proposta em PDF</span>
+            <div class="ai-actions">
+              <span class="ai-btn primary">Aplicar ação</span>
+              <span class="ai-btn">Ver motivo</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="dir-f">
+    <h2>F — Compacto</h2>
+    <p>Mais denso para equipes que lidam com alto volume de conversas.</p>
+    <div class="preview-frame">
+      <div class="canvas variant-f variant-a">
+        <div class="topbar">
+          <div class="brand"><span class="dot"></span> FalaMais.AI</div>
+          <div class="nav">
+            <span>Dashboard</span>
+            <span class="active">Conversas</span>
+            <span>CRM</span>
+            <span>Relatórios</span>
+          </div>
+          <div class="top-actions">
+            <span class="status-pill">IA ativa</span>
+            <span>Online</span>
+          </div>
+        </div>
+        <aside class="left">
+          <div class="search">Buscar conversas...</div>
+          <div class="filters">
+            <span class="chip active">Todas</span>
+            <span class="chip">Não lidas</span>
+          </div>
+          <div class="conv active">
+            <div class="avatar">M<span class="online"></span></div>
+            <div>
+              <div class="conv-title">
+                <span>Maria Silva</span>
+                <span>10:32</span>
+              </div>
+              <span>Preciso de orçamento</span>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">J</div>
+            <div>
+              <div class="conv-title">
+                <span>João Santos</span>
+                <span>09:12</span>
+              </div>
+              <span>Integração</span>
+            </div>
+          </div>
+          <div class="conv">
+            <div class="avatar">A</div>
+            <div>
+              <div class="conv-title">
+                <span>Ana Costa</span>
+                <span>Ontem</span>
+              </div>
+              <span>Preciso de retorno</span>
+            </div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="chat-header">
+            <div class="left-meta">
+              <div class="avatar">M<span class="online"></span></div>
+              <div>
+                <strong>Maria Silva</strong>
+                <div class="chip">Online</div>
+              </div>
+            </div>
+            <div class="right-meta">
+              <span>Ligação</span>
+              <span>Menu</span>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble">
+              Olá! Gostaria de saber mais sobre seus planos.
+              <time>10:30</time>
+            </div>
+            <div class="bubble out">
+              Claro! Posso te enviar detalhes agora.
+              <time>10:32</time>
+            </div>
+            <div class="ai-inline">
+              <strong>IA sugere</strong>
+              Enviar PDF e marcar follow-up.
+              <div class="ai-actions">
+                <span class="ai-btn primary">Aprovar</span>
+                <span class="ai-btn">Editar</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer">
+            <span>Digite uma mensagem...</span>
+            <div class="tools">
+              <span>Anexo</span>
+              <span>Enviar</span>
+            </div>
+          </div>
+        </main>
+        <aside class="right">
+          <div class="ai-dock">
+            <h4>Copiloto IA</h4>
+            <span>Resumo: lead pronto para proposta</span>
+            <div class="ai-actions">
+              <span class="ai-btn primary">Aplicar ação</span>
+              <span class="ai-btn">Editar</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Pipeline</h4>
+            <span class="tag">Proposta</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const buttons = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

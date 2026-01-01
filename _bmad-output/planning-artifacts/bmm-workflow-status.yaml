@@ -1,0 +1,19 @@
+generated: "2026-01-01T14:35:56Z"
+updated: "2026-01-01T19:51:53Z"
+project: "falamais-ai"
+project_type: "full_stack"
+project_level: "3"
+selected_track: "method"
+field_type: "greenfield"
+workflow_path: "_bmad/bmm/workflows/workflow-status/paths/method-greenfield.yaml"
+workflow_status:
+  brainstorm-project: skipped
+  research: skipped
+  product-brief: "_bmad-output/planning-artifacts/product-brief-falamais-ai-2026-01-01.md"
+  prd: "_bmad-output/planning-artifacts/prd.md"
+  create-ux-design: "_bmad-output/planning-artifacts/ux-design-specification.md"
+  create-architecture: "_bmad-output/planning-artifacts/architecture.md"
+  create-epics-and-stories: "_bmad-output/planning-artifacts/epics.md"
+  test-design: optional
+  implementation-readiness: "_bmad-output/planning-artifacts/implementation-readiness-report-2026-01-01.md"
+  sprint-planning: "_bmad-output/implementation-artifacts/sprint-status.yaml"

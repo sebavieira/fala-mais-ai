@@ -1,0 +1,19 @@
+{
+  "name": "@repo/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "7.2.0",
+    "@prisma/adapter-pg": "7.2.0",
+    "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.2",
+    "prisma": "7.2.0"
+  }
+}

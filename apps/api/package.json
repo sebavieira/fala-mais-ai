@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "bootstrap:tenant": "tsx src/modules/tenant/bootstrap-cli.ts",
+    "verify-bootstrap": "tsx src/modules/tenant/verify-bootstrap.ts"
+  },
+  "dependencies": {
+    "@repo/db": "*",
+    "@repo/shared": "*",
+    "fastify": "5.6.2",
+    "zod": "4.3.4"
+  },
+  "devDependencies": {
+    "@repo/config": "*",
+    "@types/node": "^22.15.3",
+    "eslint": "^9.39.1",
+    "tsx": "^4.19.4",
+    "typescript": "5.9.2"
+  }
+}

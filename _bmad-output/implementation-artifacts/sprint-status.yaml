@@ -1,0 +1,116 @@
+# generated: 2026-01-01T19:51:45Z
+# project: falamais-ai
+# project_key: falamais-ai
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog -> in-progress: Automatically when first story is created (via create-story)
+#   - in-progress -> done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-01-01T19:51:45Z
+project: falamais-ai
+project_key: falamais-ai
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  epic-1: in-progress
+  1-1-set-up-starter-template-and-bootstrap-tenant-workspace: done
+  1-2-manage-tenant-settings: backlog
+  1-3-user-directory-and-deactivation: backlog
+  1-4-invite-user-to-tenant: backlog
+  1-5-assign-roles-and-enforce-rbac: backlog
+  1-6-team-and-queue-assignments: backlog
+  1-7-user-profile-self-update: backlog
+  1-8-deactivate-tenant-workspace: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-onboarding-checklist-and-progress: backlog
+  2-2-connect-whatsapp-via-qr-code: backlog
+  2-3-connection-health-reconnect-and-alerts: backlog
+  2-4-onboarding-templates: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-real-time-conversation-list: backlog
+  3-2-conversation-thread-view: backlog
+  3-3-assign-and-transfer-conversations: backlog
+  3-4-inbox-filters-and-search: backlog
+  3-5-conversation-timeline-of-actions: backlog
+  3-6-send-and-receive-text-messages: backlog
+  3-7-media-messages-support: backlog
+  3-8-delivery-and-read-status: backlog
+  3-9-keyboard-shortcuts-and-quick-switcher: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-lead-profile-creation-and-editing: backlog
+  4-2-funnel-stage-management: backlog
+  4-3-tags-and-custom-fields: backlog
+  4-4-conversation-to-lead-association: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-intent-and-sentiment-classification: backlog
+  5-2-ai-response-suggestions: backlog
+  5-3-approve-edit-or-reject-suggestions: backlog
+  5-4-ai-action-execution-with-approval: backlog
+  5-5-lead-scoring: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-create-automation-draft: backlog
+  6-2-configure-triggers-actions-and-delays: backlog
+  6-3-enable-or-disable-automations: backlog
+  6-4-execute-automations: backlog
+  6-5-test-automations-with-sample-data: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-handoff-qualified-leads: backlog
+  7-2-create-follow-up-tasks: backlog
+  epic-7-retrospective: optional
+
+  epic-8: backlog
+  8-1-response-time-and-sla-metrics: backlog
+  8-2-ai-and-automation-performance-metrics: backlog
+  8-3-funnel-conversion-analytics: backlog
+  epic-8-retrospective: optional
+
+  epic-9: backlog
+  9-1-audit-log-capture: backlog
+  9-2-audit-log-review: backlog
+  9-3-automation-kill-switch: backlog
+  epic-9-retrospective: optional
+
+  epic-10: backlog
+  10-1-inbound-webhook-ingestion: backlog
+  10-2-outbound-http-actions: backlog
+  epic-10-retrospective: optional

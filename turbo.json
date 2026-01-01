@@ -1,0 +1,32 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "globalEnv": [
+    "DATABASE_URL",
+    "REDIS_URL",
+    "PORT",
+    "TENANT_NAME",
+    "ADMIN_EMAIL",
+    "ADMIN_NAME",
+    "ADMIN_ROLE",
+    "TENANT_ID",
+    "NEXT_PUBLIC_API_BASE_URL"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
